@@ -1,11 +1,16 @@
-// Reexport your entry components here
-export { default as Accordion } from './components/Accordeon.svelte';
+export { default as Accordeon } from './components/Accordeon.svelte';
 export { default as Breadcrumb } from './components/Breadcrumb.svelte';
 export { default as Button } from './components/Button.svelte';
 export { default as Checkbox } from './components/Checkbox.svelte';
 export { default as DurationPicker } from './components/DurationPicker.svelte';
 export { default as LabeledComponent } from './components/LabeledComponent.svelte';
 export { default as Link } from './components/Link.svelte';
+export { default as LoadingBackground } from './components/LoadingBackground.svelte';
+export { default as LoadingSpinner } from './components/LoadingSpinner.svelte';
+export { default as Modal } from './components/Modal.svelte';
+export { default as NumberInput } from './components/NumberInput.svelte';
+export { default as Select } from './components/Select.svelte';
+export { default as Sidebar } from './components/sidebar/Sidebar.svelte';
 export { default as SimpleTable } from './components/SimpleTable.svelte';
 export { default as SliderInput } from './components/SliderInput.svelte';
 export { default as TextArea } from './components/TextArea.svelte';
@@ -15,3 +20,4 @@ export { default as ToastContainer } from './components/toast/ToastContainer.sve
 export { default as Tooltip } from './components/Tooltip.svelte';
 export { default as VerticalDrawer } from './components/VerticalDrawer.svelte';
 export { default as Video } from './components/Video.svelte';
+export * from './icons/index.js';
