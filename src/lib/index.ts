@@ -16,7 +16,7 @@ export { default as SliderInput } from './components/SliderInput.svelte';
 export { default as TextArea } from './components/TextArea.svelte';
 export { default as TextInput } from './components/TextInput.svelte';
 export { default as Toast } from './components/toast/Toast.svelte';
-export { default as ToastContainer } from './components/toast/ToastContainer.svelte';
+export { createToast, default as ToastContainer } from './components/toast/ToastContainer.svelte';
 export { default as Tooltip } from './components/Tooltip.svelte';
 export { default as VerticalDrawer } from './components/VerticalDrawer.svelte';
 export { default as Video } from './components/Video.svelte';

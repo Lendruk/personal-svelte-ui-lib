@@ -26,5 +26,4 @@ function processIndexFile(indexPath, componentsPath) {
 	fs.writeFileSync(indexPath, indexContent);
 }
 
-processIndexFile('./src/lib/index.ts', './src/lib/components');
 processIndexFile('./src/lib/icons/index.ts', './src/lib/icons');
