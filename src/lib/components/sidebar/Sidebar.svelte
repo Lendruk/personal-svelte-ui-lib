@@ -50,6 +50,10 @@
 
 		return false;
 	}
+
+	$: {
+		pathName = $page.url.pathname.slice() + $page.url.search;
+	}
 </script>
 
 <aside
@@ -79,8 +83,8 @@
 										<a
 											href={subRoute.navHref}
 											class={`${
-												isCurrentPathSelected(subRoute) ? 'bg-red-950 text-white' : ''
-											} pl-8 pr-4 pt-2 pb-2 text-md flex items-center gap-4 hover:bg-red-950 hover:bg-slate-300 hover:text-white hover:text-zinc-800 hover:transition-all`}
+												isCurrentPathSelected(subRoute) ? 'bg-red-950 text-white ' : ''
+											}pl-8 pr-4 pt-2 pb-2 text-md flex items-center gap-4 hover:bg-red-950 hover:bg-slate-300 hover:text-white hover:text-zinc-800 hover:transition-all`}
 										>
 											{#if subRoute.icon}
 												<svelte:component
