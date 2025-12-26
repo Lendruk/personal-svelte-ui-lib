@@ -20,7 +20,7 @@
 	<ul class={`flex ${orientation === 'VERTICAL' ? 'flex-col' : 'flex-row'} min-w-[20%]`}>
 		{#each entries as entry}
 			<li
-				class={`${activeTab === entry.id ? 'bg-red-950' : ''} flex items-center gap-2 pb-1 pl-2 pt-1 `}
+				class={`${activeTab === entry.id ? 'bg-main' : ''} flex items-center gap-2 pb-1 pl-2 pt-1 `}
 			>
 				{#if entry.icon}
 					{@const Icon = entry.icon}

@@ -9,13 +9,13 @@
 	function formatClasses(): string {
 		if (isSelected) {
 			if (disabled) {
-				return 'bg-zinc-900 cursor-not-allowed text-red-950';
+				return 'bg-surface-color cursor-not-allowed text-main';
 			}
-			return 'bg-zinc-900';
+			return 'bg-surface-color';
 		}
 
 		if (disabled) {
-			return 'fill-zinc-900 cursor-not-allowed text-red-950';
+			return 'fill-surface-color cursor-not-allowed text-main';
 		}
 
 		return '';
@@ -23,7 +23,7 @@
 </script>
 
 <button
-	class={`flex text-center justify-center items-center rounded-md pl-4 pr-4 h-[40px] fill-white bg-red-950 text-white hover:bg-red-800 hover:transition ${className} ${formatClasses()}`}
+	class={`flex text-center justify-center items-center rounded-md pl-4 pr-4 h-[40px] fill-white bg-main text-white hover:bg-hover hover:transition ${className} ${formatClasses()}`}
 	on:click={() => {
 		if (!disabled) onClick();
 	}}><slot /></button

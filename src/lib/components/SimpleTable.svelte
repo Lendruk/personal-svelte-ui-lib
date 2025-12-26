@@ -48,8 +48,16 @@
 	) {
 		toolTipContent = actionName;
 		showToolTip = true;
-		toolTipX = e.currentTarget.offsetLeft - 100;
-		toolTipY = e.currentTarget.offsetTop;
+
+		// This logic is duplicated from Tooltip.svelte - consider refactoring
+		const rect = e.currentTarget.getBoundingClientRect();
+		toolTipX = rect.x;
+
+		if (toolTipX + e.currentTarget.clientWidth > window.innerWidth) {
+			toolTipX = rect.right - e.currentTarget.clientWidth;
+		}
+
+		toolTipY = rect.top + window.scrollY + rect.height + 4;
 	}
 
 	function formatActionAvailability(row: Row, action: Action) {
@@ -69,15 +77,16 @@
 	}
 </script>
 
-<table class={`flex flex-1 flex-col relative box-border ${cssClass}`}>
+<table class={`relative box-border flex flex-1 flex-col ${cssClass}`}>
 	<Tooltip
 		x={toolTipX}
 		y={toolTipY}
+		size="s"
 		content={toolTipContent}
 		visible={showToolTip}
 		automaticMode={false}
 	/>
-	<thead class="flex flex-1 bg-red-950 p-2 rounded-t-md">
+	<thead class="bg-main flex flex-1 rounded-t-md p-2">
 		<tr class="flex flex-1 justify-between">
 			{#if orderable}
 				<th class="flex flex-[0.2]">#</th>
@@ -91,35 +100,35 @@
 			{/if}
 		</tr>
 	</thead>
-	<tbody class="flex flex-col box-border">
+	<tbody class="box-border flex flex-col">
 		{#if rows.length > 0}
 			{#each rows as row, i}
 				<tr
-					class="flex flex-1 pt-5 pb-5 justify-between pl-2 pr-2 odd:bg-surface-color box-border hover:bg-zinc-700 hover:transition hover:duration-300"
+					class="odd:bg-dark-contrast box-border flex flex-1 justify-between pb-5 pl-2 pr-2 pt-5 hover:bg-zinc-700 hover:transition hover:duration-300"
 				>
 					{#if orderable}
-						<td class="flex justify-center flex-col flex-[0.2]">
+						<td class="flex flex-[0.2] flex-col justify-center">
 							{#if i == 0}
 								<button on:click={() => orderable?.onMoveDown(row.id)}>
 									<ChevronDown
-										class="fill-white hover:fill-red-900 hover:cursor-pointer hover:transition"
+										class="hover:fill-hover fill-white hover:cursor-pointer hover:transition"
 									/>
 								</button>
 							{:else if i == rows.length - 1}
 								<button on:click={() => orderable?.onMoveUp(row.id)}>
 									<ChevronUp
-										class="fill-white hover:fill-red-900 hover:cursor-pointer hover:transition"
+										class="hover:fill-hover fill-white hover:cursor-pointer hover:transition"
 									/>
 								</button>
 							{:else}
 								<button on:click={() => orderable?.onMoveUp(row.id)}>
 									<ChevronUp
-										class="fill-white hover:fill-red-900 hover:cursor-pointer hover:transition"
+										class="hover:fill-hover fill-white hover:cursor-pointer hover:transition"
 									/>
 								</button>
 								<button on:click={() => orderable?.onMoveDown(row.id)}>
 									<ChevronDown
-										class="fill-white hover:fill-red-900 hover:cursor-pointer hover:transition"
+										class="hover:fill-hover fill-white hover:cursor-pointer hover:transition"
 									/>
 								</button>
 							{/if}
@@ -140,14 +149,14 @@
 					{/each}
 					{#if actions.length > 0}
 						<td class="flex flex-1" />
-						<td class="flex flex-1 justify-end gap-4 items-center">
+						<td class="flex flex-1 items-center justify-end gap-4">
 							{#each actions as action}
 								<button
 									on:mouseleave={() => {
 										showToolTip = false;
 									}}
 									on:mouseenter={(e) => onMouseEnterAction(e, action.name)}
-									class={`hover:fill-red-900 hover:cursor-pointer hover:transition fill-white ${formatActionAvailability(row, action)}`}
+									class={`hover:fill-hover fill-white hover:cursor-pointer hover:transition ${formatActionAvailability(row, action)}`}
 									on:click={() => handleActionClick(row, action)}
 									><svelte:component this={action.icon} /></button
 								>
@@ -157,7 +166,7 @@
 				</tr>
 			{/each}
 		{:else}
-			<tr class="flex bg-surface-color pt-5 pb-5 justify-center flex-1">
+			<tr class="bg-surface-color flex flex-1 justify-center pb-5 pt-5">
 				<td class="text-xl">No Items</td>
 			</tr>
 		{/if}

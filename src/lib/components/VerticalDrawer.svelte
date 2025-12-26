@@ -18,9 +18,9 @@
 <div class={`${isDrawerOpen ? 'flex' : 'hidden'} absolute right-0 top-0 z-[40] flex h-full w-full`}>
 	<div
 		on:click={() => (isDrawerOpen = false)}
-		class="flex flex-1 bg-zinc-900 bg-opacity-90 backdrop-blur-sm"
+		class="flex flex-1 bg-surface-color bg-opacity-90 backdrop-blur-sm"
 	></div>
-	<div class="flex h-full flex-1 self-end bg-zinc-950">
+	<div class="flex h-full flex-1 self-end bg-dark-contrast">
 		<slot />
 	</div>
 </div>

@@ -14,7 +14,7 @@
 		<div slot="label">{label}</div>
 		<div slot="content" class="flex gap-2">
 			<input
-				class="h-[40px] flex focus:outline-none w-full bg-surface-color border-red-950 border-2 rounded-md inset-2 shadow-xl pl-2"
+				class="h-[40px] flex focus:outline-none w-full bg-dark-contrast border-main border-2 rounded-md inset-2 shadow-xl pl-2"
 				type="number"
 				placeholder={placeholder ?? ''}
 				{min}
@@ -28,7 +28,7 @@
 {:else}
 	<div class="flex gap-2">
 		<input
-			class="h-[40px] flex focus:outline-none w-full bg-surface-color border-red-950 border-2 rounded-md inset-2 shadow-xl pl-2"
+			class="h-[40px] flex focus:outline-none w-full bg-dark-contrast border-main border-2 rounded-md inset-2 shadow-xl pl-2"
 			type="number"
 			placeholder={placeholder ?? ''}
 			{min}

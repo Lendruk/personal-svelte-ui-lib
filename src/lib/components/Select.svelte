@@ -14,7 +14,7 @@
 	<select
 		on:change={(e) => dispatch('change', e)}
 		bind:value
-		class={` bg-surface-color border-red-950 border-2 flex flex-1 h-[40px] rounded-md shadow-xl pl-2 cursor-pointer ${cssClass}`}
+		class={` bg-surface-color border-main border-2 flex flex-1 h-[40px] rounded-md shadow-xl pl-2 cursor-pointer ${cssClass}`}
 	>
 		<slot />
 	</select>

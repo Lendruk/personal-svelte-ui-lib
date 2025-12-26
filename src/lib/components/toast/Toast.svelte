@@ -23,7 +23,7 @@
 	});
 </script>
 
-<div class="bg-red-950 min-w-[150px] rounded-lg flex flex-col fill-white">
+<div class="bg-main min-w-[150px] rounded-lg flex flex-col fill-white">
 	<div class="flex flex-1 justify-between items-center p-4 gap-4">
 		<div>
 			{content}
@@ -35,6 +35,6 @@
 	<div
 		style={`width:${curWidthPercentage}%;`}
 		bind:this={progressBarRef}
-		class="bg-red-900 w-full h-[5px] rounded-b-lg transition"
+		class="bg-hover w-full h-[5px] rounded-b-lg transition"
 	></div>
 </div>

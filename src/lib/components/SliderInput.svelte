@@ -22,7 +22,7 @@
 				{max}
 				{step}
 				bind:value
-				class="focus:outline-none rounded-md w-2/12 bg-surface-color border-red-950 border-2 text-right pr-2"
+				class="focus:outline-none rounded-md w-2/12 bg-surface-color border-main border-2 text-right pr-2"
 			/>
 		{/if}
 	</div>

@@ -21,15 +21,16 @@
 
 	function onMouseEnter() {
 		visible = true;
-		const rect = contentDiv.getBoundingClientRect();
-		x = rect.x;
-
-		if (x + toolTipDiv.clientWidth > window.innerWidth) {
-			x = rect.right - toolTipDiv.clientWidth;
+		if (automaticMode) {
+			const rect = contentDiv.getBoundingClientRect();
+			x = rect.x;
+	
+			if (x + toolTipDiv.clientWidth > window.innerWidth) {
+				x = rect.right - toolTipDiv.clientWidth;
+			}
+	
+			y = rect.top + window.scrollY + rect.height + 4;
 		}
-
-		console.log(contentDiv);
-		y = rect.top + window.scrollY + rect.height + 4;
 	}
 
 	function onMouseLeave() {
@@ -86,8 +87,9 @@
 	justify-center 
 	rounded-lg 
 	border-2 
-	border-red-900 
-	bg-red-950 
+	border-hover 
+	bg-dark-contrast
+	border-main
 	bg-opacity-90 
 	pt-${sizeMap[size].pt} 
 	pb-${sizeMap[size].pb} 

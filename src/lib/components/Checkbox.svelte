@@ -5,7 +5,7 @@
 
 <button
 	on:click={() => (checked = !checked)}
-	class="flex items-center rounded-md gap-4 h-[40px] pl-4 pr-4 bg-red-950 hover:bg-red-900 hover:transition-all"
+	class="flex items-center rounded-md gap-4 h-[40px] pl-4 pr-4 bg-main hover:bg-hover hover:transition-all"
 >
 	{#if inlineLabel}
 		<div>{inlineLabel}</div>

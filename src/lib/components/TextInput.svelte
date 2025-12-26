@@ -11,7 +11,7 @@
 </script>
 
 <input
-	class={`h-[40px] flex focus:outline-none w-full bg-surface-color border-red-950 border-2 rounded-md inset-2 shadow-xl pl-2 ${disabled ? 'text-gray-500 cursor-not-allowed' : ''} ${isBlurred ? 'blur-lg' : ''}`}
+	class={`h-[40px] flex focus:outline-none w-full bg-dark-contrast border-main border-2 rounded-md inset-2 shadow-xl pl-2 ${disabled ? 'text-gray-500 cursor-not-allowed' : ''} ${isBlurred ? 'blur-lg' : ''}`}
 	type="text"
 	{disabled}
 	placeholder={placeholder ?? ''}

@@ -7,7 +7,7 @@
 </script>
 
 <textarea
-	class="bg-surface-color rounded-md border-2 border-red-950 pl-2 shadow-xl focus:outline-none"
+	class="bg-dark-contrast rounded-md border-2 border-main pl-2 shadow-xl focus:outline-none"
 	bind:value
 	on:change={onChange}
 	on:keydown={onKeyDown}
