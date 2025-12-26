@@ -1,6 +1,11 @@
 <script lang="ts">
-	export let isDrawerOpen = false;
-	export let onDrawerClose: () => void | Promise<void> = () => {};
+	let {
+		isDrawerOpen = $bindable(false),
+		onDrawerClose = () => {}
+	}: {
+		isDrawerOpen?: boolean;
+		onDrawerClose?: () => void;
+	} = $props();
 
 	function onKeyPress(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
@@ -10,12 +15,12 @@
 	}
 </script>
 
-<div class={`${isDrawerOpen ? 'flex' : 'hidden'} absolute right-0 top-0 w-full h-full flex z-[40]`}>
+<div class={`${isDrawerOpen ? 'flex' : 'hidden'} absolute right-0 top-0 z-[40] flex h-full w-full`}>
 	<div
 		on:click={() => (isDrawerOpen = false)}
 		class="flex flex-1 bg-zinc-900 bg-opacity-90 backdrop-blur-sm"
 	></div>
-	<div class="flex flex-1 self-end bg-red-950 h-full">
+	<div class="flex h-full flex-1 self-end bg-zinc-950">
 		<slot />
 	</div>
 </div>

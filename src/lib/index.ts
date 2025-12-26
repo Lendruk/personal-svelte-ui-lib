@@ -10,7 +10,6 @@ export { default as LoadingSpinner } from './components/LoadingSpinner.svelte';
 export { default as Modal } from './components/Modal.svelte';
 export { default as NumberInput } from './components/NumberInput.svelte';
 export { default as Select } from './components/Select.svelte';
-export { default as Sidebar } from './components/sidebar/Sidebar.svelte';
 export { default as SimpleTable } from './components/SimpleTable.svelte';
 export { default as SliderInput } from './components/SliderInput.svelte';
 export { default as TextArea } from './components/TextArea.svelte';
@@ -20,4 +19,6 @@ export { createToast, default as ToastContainer } from './components/toast/Toast
 export { default as Tooltip } from './components/Tooltip.svelte';
 export { default as VerticalDrawer } from './components/VerticalDrawer.svelte';
 export { default as Video } from './components/Video.svelte';
+export { default as Menu } from './components/Menu.svelte';
+export type { MenuEntry } from './components/Menu.svelte';
 export * from './icons/index.js';

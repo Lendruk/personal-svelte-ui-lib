@@ -1,23 +1,70 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	export let content = '';
-	export let visible = false;
-	export let automaticMode = true;
-	export let x = 0;
-	export let y = 0;
+	let {
+		content = '',
+		visible = false,
+		automaticMode = true,
+		x = 0,
+		y = 0,
+		size = 'm'
+	}: {
+		content?: string;
+		visible?: boolean;
+		automaticMode?: boolean;
+		x?: number;
+		y?: number;
+		size?: 's' | 'm';
+	} = $props();
 
 	let contentDiv: HTMLElement;
 	let toolTipDiv: HTMLDivElement;
 
 	function onMouseEnter() {
 		visible = true;
-		x = contentDiv.offsetLeft - toolTipDiv.clientWidth;
-		y = contentDiv.offsetTop + 15;
+		const rect = contentDiv.getBoundingClientRect();
+		x = rect.x;
+
+		if (x + toolTipDiv.clientWidth > window.innerWidth) {
+			x = rect.right - toolTipDiv.clientWidth;
+		}
+
+		console.log(contentDiv);
+		y = rect.top + window.scrollY + rect.height + 4;
 	}
 
 	function onMouseLeave() {
 		visible = false;
 	}
+
+	const sizeMap = {
+		xs: {
+			minW: 40,
+			minH: 20,
+			pt: 1,
+			pb: 1,
+			pl: 2,
+			pr: 2,
+			textSize: 'xs'
+		},
+		s: {
+			minW: 40,
+			minH: 20,
+			pt: 1,
+			pb: 1,
+			pl: 2,
+			pr: 2,
+			textSize: 'sm'
+		},
+		m: {
+			minW: 80,
+			minH: 30,
+			pt: 4,
+			pb: 4,
+			pl: 4,
+			pr: 4,
+			textSize: 'm'
+		}
+	};
 
 	onMount(() => {
 		if (automaticMode) {
@@ -31,9 +78,25 @@
 <div
 	bind:this={toolTipDiv}
 	style={`top:${y}px; left:${x}px`}
-	class={`absolute p-4 min-h-[30px] flex-1 bg-red-950 bg-opacity-90 border-2 transition duration-300 min-w-[80px] border-red-900 justify-center rounded-lg ${
-		!visible ? 'invisible' : 'flex'
-	} items-center`}
+	class={`fixed 
+	z-50
+	min-h-[${sizeMap[size].minH}px] 
+	min-w-[${sizeMap[size].minW}px] 
+	flex-1 
+	justify-center 
+	rounded-lg 
+	border-2 
+	border-red-900 
+	bg-red-950 
+	bg-opacity-90 
+	pt-${sizeMap[size].pt} 
+	pb-${sizeMap[size].pb} 
+	pl-${sizeMap[size].pl} 
+	pr-${sizeMap[size].pr}
+	text-${sizeMap[size].textSize}
+	transition 
+	duration-300 
+	${!visible ? 'invisible' : 'flex'} items-center`}
 >
 	{content}
 	<slot name="toolTipContent" />
