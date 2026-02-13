@@ -9,6 +9,12 @@
 <a
 	{href}
 	{target}
-	class={`flex items-center justify-center rounded-md pt-2 pb-2 pl-4 pr-4 bg-main text-white hover:bg-hover hover:transition ${cssClass} ${isSelected ? 'bg-surface-color' : ''}`}
-	><slot /></a
+	class={`shadow-main/20 hover:shadow-main/30 inline-flex items-center justify-center rounded-lg
+		bg-main px-4 py-2.5 text-sm
+		font-medium text-contrast-text
+		shadow-sm transition-all duration-200
+		ease-out hover:bg-hover hover:shadow-md
+		focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-dark-contrast
+		active:scale-[0.97]
+		${cssClass} ${isSelected ? 'bg-surface-color ring-2 ring-main' : ''}`}><slot /></a
 >

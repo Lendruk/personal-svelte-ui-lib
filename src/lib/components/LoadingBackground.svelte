@@ -3,7 +3,12 @@
 </script>
 
 <div
-	class="absolute top-0 w-full h-full backdrop-blur-md flex items-center justify-center rounded-sm z-10"
+	class="bg-dark-contrast/40 absolute inset-0 z-10 flex animate-fade-in items-center
+		justify-center rounded-lg
+		backdrop-blur-sm"
 >
-	<LoadingSpinner />
+	<div class="flex flex-col items-center gap-3">
+		<LoadingSpinner />
+		<span class="text-sm text-muted-foreground">Loading...</span>
+	</div>
 </div>

@@ -14,7 +14,13 @@
 		<div slot="label">{label}</div>
 		<div slot="content" class="flex gap-2">
 			<input
-				class="h-[40px] flex focus:outline-none w-full bg-dark-contrast border-main border-2 rounded-md inset-2 shadow-xl pl-2"
+				class="border-main/40 hover:border-main/70 flex h-10 w-full
+					rounded-lg border bg-dark-contrast px-3 text-sm
+					text-contrast-text
+					transition-all duration-200 ease-out
+					[appearance:textfield] placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring
+					focus:ring-offset-1
+					focus:ring-offset-dark-contrast [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 				type="number"
 				placeholder={placeholder ?? ''}
 				{min}
@@ -28,7 +34,13 @@
 {:else}
 	<div class="flex gap-2">
 		<input
-			class="h-[40px] flex focus:outline-none w-full bg-dark-contrast border-main border-2 rounded-md inset-2 shadow-xl pl-2"
+			class="border-main/40 hover:border-main/70 flex h-10 w-full
+				rounded-lg border bg-dark-contrast px-3 text-sm
+				text-contrast-text
+				transition-all duration-200 ease-out
+				[appearance:textfield] placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring
+				focus:ring-offset-1
+				focus:ring-offset-dark-contrast [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 			type="number"
 			placeholder={placeholder ?? ''}
 			{min}

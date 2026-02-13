@@ -23,18 +23,30 @@
 	});
 </script>
 
-<div class="bg-main min-w-[150px] rounded-lg flex flex-col fill-white">
-	<div class="flex flex-1 justify-between items-center p-4 gap-4">
-		<div>
+<div
+	class="border-main/20 min-w-[280px] animate-toast-in overflow-hidden rounded-xl
+	border bg-surface-color fill-contrast-text shadow-xl
+	shadow-black/30"
+>
+	<div class="flex items-center justify-between gap-3 px-4 py-3">
+		<p class="text-sm text-contrast-text">
 			{content}
-		</div>
-		<button on:click={onDismissClick}>
+		</p>
+		<button
+			on:click={onDismissClick}
+			class="shrink-0 rounded-md p-1
+				transition-colors duration-150
+				hover:bg-dark-contrast
+				focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+		>
 			<XIcon />
 		</button>
 	</div>
-	<div
-		style={`width:${curWidthPercentage}%;`}
-		bind:this={progressBarRef}
-		class="bg-hover w-full h-[5px] rounded-b-lg transition"
-	></div>
+	<div class="h-1 w-full bg-dark-contrast">
+		<div
+			style={`width:${curWidthPercentage}%;`}
+			bind:this={progressBarRef}
+			class="h-full rounded-r-full bg-main transition-all duration-75 ease-linear"
+		></div>
+	</div>
 </div>

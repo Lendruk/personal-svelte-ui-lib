@@ -10,20 +10,36 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="relative flex flex-1 items-center justify-center h-full mt-2 mb-2">
+<div class="relative flex flex-1 items-center">
 	<select
 		on:change={(e) => dispatch('change', e)}
 		bind:value
-		class={` bg-surface-color border-main border-2 flex flex-1 h-[40px] rounded-md shadow-xl pl-2 cursor-pointer ${cssClass}`}
+		class={`border-main/40 hover:border-main/70 h-10 w-full cursor-pointer
+			appearance-none rounded-lg border bg-dark-contrast px-3 pr-9
+			text-sm
+			text-contrast-text transition-all duration-200
+			ease-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1
+			focus:ring-offset-dark-contrast
+			${cssClass}`}
 	>
 		<slot />
 	</select>
+	<div class="pointer-events-none absolute right-2.5 flex items-center">
+		<svg
+			class="h-4 w-4 text-muted-foreground"
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+		</svg>
+	</div>
 	{#if isLoading}
 		<div
-			class="absolute w-full backdrop-blur-md h-full top-0 rounded-sm flex justify-between items-center p-2"
+			class="bg-dark-contrast/60 absolute inset-0 flex items-center justify-between rounded-lg px-3 backdrop-blur-sm"
 		>
-			<div>Loading</div>
-			<LoadingSpinner width={25} height={25} />
+			<span class="text-sm text-muted-foreground">Loading...</span>
+			<LoadingSpinner width={18} height={18} />
 		</div>
 	{/if}
 </div>

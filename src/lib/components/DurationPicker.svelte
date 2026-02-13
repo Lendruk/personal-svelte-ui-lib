@@ -36,12 +36,16 @@
 	});
 </script>
 
-<div class="flex items-center gap-2">
-	<NumberInput bind:value={scaledValue} min={1} />
-	<Select bind:value={timeScale as TimeScale}>
-		<option value="seconds">Seconds</option>
-		<option value="minutes">Minutes</option>
-		<option value="hours">Hours</option>
-		<option value="days">Days</option>
-	</Select>
+<div class="flex items-center gap-3">
+	<div class="flex-1">
+		<NumberInput bind:value={scaledValue} min={1} />
+	</div>
+	<div class="w-32">
+		<Select bind:value={timeScale as TimeScale}>
+			<option value="seconds">Seconds</option>
+			<option value="minutes">Minutes</option>
+			<option value="hours">Hours</option>
+			<option value="days">Days</option>
+		</Select>
+	</div>
 </div>

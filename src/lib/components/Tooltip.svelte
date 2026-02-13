@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
+
 	let {
 		content = '',
 		visible = false,
@@ -16,19 +17,20 @@
 		size?: 's' | 'm';
 	} = $props();
 
-	let contentDiv: HTMLElement;
 	let toolTipDiv: HTMLDivElement;
+	let targetWrapper: HTMLDivElement;
+	let portalTarget: HTMLDivElement;
 
 	function onMouseEnter() {
 		visible = true;
-		if (automaticMode) {
-			const rect = contentDiv.getBoundingClientRect();
+		if (automaticMode && targetWrapper) {
+			const rect = targetWrapper.getBoundingClientRect();
 			x = rect.x;
-	
-			if (x + toolTipDiv.clientWidth > window.innerWidth) {
-				x = rect.right - toolTipDiv.clientWidth;
+
+			if (portalTarget && x + portalTarget.clientWidth > window.innerWidth) {
+				x = rect.right - portalTarget.clientWidth;
 			}
-	
+
 			y = rect.top + window.scrollY + rect.height + 4;
 		}
 	}
@@ -68,10 +70,17 @@
 	};
 
 	onMount(() => {
-		if (automaticMode) {
-			contentDiv = toolTipDiv.nextSibling?.nextSibling as HTMLElement;
-			contentDiv.addEventListener('mouseenter', onMouseEnter);
-			contentDiv.addEventListener('mouseleave', onMouseLeave);
+		// Portal the tooltip to document.body so it escapes any containing block
+		// created by ancestor CSS (backdrop-filter, transform, filter, etc.)
+		if (toolTipDiv) {
+			portalTarget = toolTipDiv;
+			document.body.appendChild(toolTipDiv);
+		}
+	});
+
+	onDestroy(() => {
+		if (portalTarget && portalTarget.parentNode) {
+			portalTarget.parentNode.removeChild(portalTarget);
 		}
 	});
 </script>
@@ -79,28 +88,29 @@
 <div
 	bind:this={toolTipDiv}
 	style={`top:${y}px; left:${x}px`}
-	class={`fixed 
-	z-50
-	min-h-[${sizeMap[size].minH}px] 
-	min-w-[${sizeMap[size].minW}px] 
-	flex-1 
-	justify-center 
-	rounded-lg 
-	border-2 
-	border-hover 
-	bg-dark-contrast
-	border-main
-	bg-opacity-90 
-	pt-${sizeMap[size].pt} 
-	pb-${sizeMap[size].pb} 
-	pl-${sizeMap[size].pl} 
-	pr-${sizeMap[size].pr}
-	text-${sizeMap[size].textSize}
-	transition 
-	duration-300 
-	${!visible ? 'invisible' : 'flex'} items-center`}
+	class={`border-main/30 fixed
+		z-50 rounded-lg border
+		bg-dark-contrast px-3 py-1.5
+		text-sm text-contrast-text
+		shadow-lg shadow-black/30
+		transition-[opacity,transform] duration-150
+		${size === 's' ? 'px-2 py-1 text-xs' : ''}
+		${!visible ? 'invisible scale-95 opacity-0' : 'flex scale-100 opacity-100'}
+		items-center`}
 >
 	{content}
 	<slot name="toolTipContent" />
 </div>
-<slot name="target" />
+{#if automaticMode}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		bind:this={targetWrapper}
+		onmouseenter={onMouseEnter}
+		onmouseleave={onMouseLeave}
+		class="inline-block"
+	>
+		<slot name="target" />
+	</div>
+{:else}
+	<slot name="target" />
+{/if}

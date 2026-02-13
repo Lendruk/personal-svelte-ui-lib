@@ -7,22 +7,31 @@
 		onDrawerClose?: () => void;
 	} = $props();
 
+	function close() {
+		isDrawerOpen = false;
+		onDrawerClose();
+	}
+
 	function onKeyPress(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
-			isDrawerOpen = false;
-			onDrawerClose();
+			close();
 		}
 	}
 </script>
 
-<div class={`${isDrawerOpen ? 'flex' : 'hidden'} absolute right-0 top-0 z-[40] flex h-full w-full`}>
-	<div
-		on:click={() => (isDrawerOpen = false)}
-		class="flex flex-1 bg-surface-color bg-opacity-90 backdrop-blur-sm"
-	></div>
-	<div class="flex h-full flex-1 self-end bg-dark-contrast">
-		<slot />
+{#if isDrawerOpen}
+	<div class="fixed inset-0 z-40 flex">
+		<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+		<div onclick={close} class="flex-1 animate-fade-in bg-black/50 backdrop-blur-sm"></div>
+		<div
+			class="border-main/20 flex h-full w-full max-w-md animate-slide-in-right
+			flex-col border-l
+			bg-dark-contrast shadow-2xl
+			shadow-black/50"
+		>
+			<slot />
+		</div>
 	</div>
-</div>
+{/if}
 
-<svelte:window on:keydown={onKeyPress} />
+<svelte:window onkeydown={onKeyPress} />

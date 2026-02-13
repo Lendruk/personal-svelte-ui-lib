@@ -3,8 +3,8 @@
 	let cssClass = '';
 </script>
 
-<div class={`flex flex-col mt-2 mb-2 ${cssClass}`}>
-	<div class="text-lg mb-1">
+<div class={`flex flex-col gap-1.5 ${cssClass}`}>
+	<div class="text-sm font-medium text-muted-foreground">
 		<slot name="label" />
 	</div>
 	<slot name="content" />

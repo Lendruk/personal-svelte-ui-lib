@@ -16,21 +16,29 @@
 	} = $props();
 </script>
 
-<div class={`flex flex-row gap-4`}>
-	<ul class={`flex ${orientation === 'VERTICAL' ? 'flex-col' : 'flex-row'} min-w-[20%]`}>
+<div class="flex flex-row gap-6">
+	<nav class={`flex ${orientation === 'VERTICAL' ? 'flex-col' : 'flex-row'} min-w-[20%] gap-0.5`}>
 		{#each entries as entry}
-			<li
-				class={`${activeTab === entry.id ? 'bg-main' : ''} flex items-center gap-2 pb-1 pl-2 pt-1 `}
+			<button
+				class={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium
+					transition-all duration-200 ease-out
+					focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+					${
+						activeTab === entry.id
+							? 'shadow-main/25 bg-main text-contrast-text shadow-sm'
+							: 'hover:bg-surface-color/60 text-muted-foreground hover:text-contrast-text'
+					}`}
+				onclick={() => (activeTab = entry.id)}
 			>
 				{#if entry.icon}
 					{@const Icon = entry.icon}
-					<Icon width={14} class="fill-white" height={14} color="#FFFFFF" />
+					<Icon width={16} class="fill-current" height={16} />
 				{/if}
-				<button class="w-full text-start" onclick={() => (activeTab = entry.id)}
-					>{entry.label}</button
-				>
-			</li>
+				{entry.label}
+			</button>
 		{/each}
-	</ul>
-	<slot />
+	</nav>
+	<div class="flex-1">
+		<slot />
+	</div>
 </div>

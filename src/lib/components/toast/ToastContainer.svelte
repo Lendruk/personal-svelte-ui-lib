@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="absolute bottom-4 right-4">
+<div class="fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2">
 	{#each toasts as toast, i (i)}
 		<Toast
 			onDismissClick={() => removeToast(toast)}
