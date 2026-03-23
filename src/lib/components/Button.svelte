@@ -1,12 +1,25 @@
 <script lang="ts">
-	export let onClick = (event: MouseEvent) => {};
+	import type { Snippet } from 'svelte';
 
-	export let isSelected = false;
-	export let disabled = false;
-	export let variant: 'primary' | 'secondary' | 'ghost' | 'danger' = 'primary';
-	export let size: 'sm' | 'md' | 'lg' = 'md';
-	let className = '';
-	export { className as class };
+	interface Props {
+		onClick?: (event: MouseEvent) => void;
+		isSelected?: boolean;
+		disabled?: boolean;
+		variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+		size?: 'sm' | 'md' | 'lg';
+		class?: string;
+		children?: Snippet;
+	}
+
+	let {
+		onClick = $bindable(() => {}),
+		isSelected = $bindable(false),
+		disabled = $bindable(false),
+		variant = 'primary',
+		size = 'md',
+		class: className = '',
+		children
+	}: Props = $props();
 
 	const sizeClasses: Record<string, string> = {
 		sm: 'h-8 px-3 text-sm gap-1.5',
@@ -41,7 +54,8 @@
 		focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-dark-contrast
 		active:scale-[0.97]
 		${sizeClasses[size]} ${className} ${formatClasses()}`}
-	on:click={(e) => {
+	onclick={(e) => {
 		if (!disabled) onClick(e);
-	}}><slot /></button
+	}}
+	>{#if children}{@render children()}{/if}</button
 >

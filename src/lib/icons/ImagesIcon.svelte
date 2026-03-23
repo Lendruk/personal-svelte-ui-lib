@@ -1,9 +1,27 @@
 <script lang="ts">
-	export let color = '#000000';
+	export let color = 'currentColor';
+	export let height = 16;
+	export let width = 16;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={color} viewBox="0 0 576 512"
-	><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
-		d="M160 32c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H160zM396 138.7l96 144c4.9 7.4 5.4 16.8 1.2 24.6S480.9 320 472 320H328 280 200c-9.2 0-17.6-5.3-21.6-13.6s-2.9-18.2 2.9-25.4l64-80c4.6-5.7 11.4-9 18.7-9s14.2 3.3 18.7 9l17.3 21.6 56-84C360.5 132 368 128 376 128s15.5 4 20 10.7zM192 128a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM48 120c0-13.3-10.7-24-24-24S0 106.7 0 120V344c0 75.1 60.9 136 136 136H456c13.3 0 24-10.7 24-24s-10.7-24-24-24H136c-48.6 0-88-39.4-88-88V120z"
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	{width}
+	{height}
+	stroke={color}
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	fill="none"
+	stroke-width="2"
+	viewBox="0 0 24 24"
+>
+	<path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16" /><path
+		d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"
+	/><circle cx="13" cy="7" r="1" fill="currentColor" /><rect
+		x="8"
+		y="2"
+		width="14"
+		height="14"
+		rx="2"
 	/></svg
 >

@@ -8,7 +8,7 @@
 <svg
 	{height}
 	{width}
-	class={`fill-white ${cssClass}`}
+	class={` ${cssClass}`}
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 448 512"
 	><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
