@@ -1,6 +1,7 @@
 export { default as Accordeon } from './components/Accordeon.svelte';
 export { default as Breadcrumb } from './components/Breadcrumb.svelte';
 export { default as Button } from './components/Button.svelte';
+export { default as CharacterCount } from './components/CharacterCount.svelte';
 export { default as Checkbox } from './components/Checkbox.svelte';
 export { default as DurationPicker } from './components/DurationPicker.svelte';
 export { default as LabeledComponent } from './components/LabeledComponent.svelte';
