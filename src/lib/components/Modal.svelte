@@ -1,34 +1,50 @@
 <script lang="ts">
-	export let showModal = false;
-	export { cssClass as class };
+	import type { Snippet } from 'svelte';
 
-	let cssClass = '';
+	interface Props {
+		showModal?: boolean;
+		class?: string;
+		header?: Snippet;
+		children?: Snippet;
+	}
+
+	let { showModal = $bindable(false), class: cssClass = '', header, children }: Props = $props();
+
 	let dialog: HTMLDialogElement;
 
-	$: if (dialog && showModal) dialog.showModal();
-	$: if (dialog && !showModal) dialog.close();
+	$effect(() => {
+		if (dialog && showModal) dialog.showModal();
+		else if (dialog && !showModal) dialog.close();
+	});
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModal = false)}
-	on:click|self={() => dialog.close()}
-	class={`border-main/20 flex min-h-[30%] min-w-[30%] flex-col
-		rounded-xl border
+	onclose={() => (showModal = false)}
+	onclick={(e) => {
+		if (e.target === dialog) dialog.close();
+	}}
+	class={`flex min-h-[30%] flex-1 flex-col rounded-xl
+		border border-main/20
 		bg-surface-color text-contrast-text shadow-2xl shadow-black/40
 		${showModal ? '' : 'hidden'} ${cssClass}`}
 >
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="flex flex-1 flex-col" on:click|stopPropagation>
-		<slot name="header" />
-		<div class="flex flex-1 p-6">
-			<slot />
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="flex flex-1 flex-col" onclick={(e) => e.stopPropagation()}>
+		{@render header?.()}
+		<div class="flex flex-1">
+			{@render children?.()}
 		</div>
 	</div>
 </dialog>
 
 <style>
+	dialog:not([open]) {
+		display: none !important;
+	}
+
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.6);
 		backdrop-filter: blur(4px);

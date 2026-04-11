@@ -1,5 +1,4 @@
 <script lang="ts">
-	export { cssClass as class };
 	let cssClass = '';
 	export let color = 'currentColor';
 	export { cssClass as class };

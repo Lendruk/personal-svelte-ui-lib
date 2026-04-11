@@ -1,15 +1,41 @@
 <script context="module" lang="ts">
 	import Toast from './Toast.svelte';
+	export type ToastVariant = 'default' | 'warning' | 'error';
+	export type ToastOptions = {
+		dismissIn?: number;
+		variant?: ToastVariant;
+	};
+
 	export type ToastDef = {
 		content: string;
 		dismissIn: number;
 		createdAt: number;
+		variant: ToastVariant;
 	};
 
 	let toasts: ToastDef[] = $state([]);
-	export const createToast = (content: string, dismissIn: number = 2500) => {
+
+	function inferToastVariant(content: string): ToastVariant {
+		const normalizedContent = content.trim().toLowerCase();
+		if (normalizedContent.includes('failed') || normalizedContent.includes('error')) {
+			return 'error';
+		}
+
+		return 'default';
+	}
+
+	export const createToast = (
+		content: string,
+		options: number | ToastOptions = 2500,
+		legacyVariant?: ToastVariant
+	) => {
+		const dismissIn = typeof options === 'number' ? options : (options.dismissIn ?? 2500);
+		const variant =
+			typeof options === 'number'
+				? (legacyVariant ?? inferToastVariant(content))
+				: (options.variant ?? inferToastVariant(content));
 		const createdAt = new Date().getUTCMilliseconds();
-		toasts.push({ content, dismissIn, createdAt });
+		toasts.push({ content, dismissIn, createdAt, variant });
 		// setTimeout(() => {
 		//   const index = toasts.findIndex(t => t.createdAt === createdAt);
 		//   toasts.splice(index, 1);
@@ -28,6 +54,7 @@
 			onDismissClick={() => removeToast(toast)}
 			content={toast.content}
 			dismissIn={toast.dismissIn}
+			variant={toast.variant}
 		/>
 	{/each}
 </div>

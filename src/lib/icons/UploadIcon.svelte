@@ -1,8 +1,8 @@
 <script>
 	export { cssClass as class };
 	let cssClass = '';
-	export let width = 150;
-	export let height = 150;
+	export let width = 16;
+	export let height = 16;
 </script>
 
 <svg

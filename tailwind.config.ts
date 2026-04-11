@@ -16,6 +16,7 @@ export default {
 				muted: 'rgb(var(--color-muted) / <alpha-value>)',
 				'muted-foreground': 'rgb(var(--color-muted-foreground) / <alpha-value>)',
 				danger: 'rgb(var(--color-danger) / <alpha-value>)',
+				warning: 'rgb(var(--color-warning) / <alpha-value>)',
 				success: 'rgb(var(--color-success) / <alpha-value>)',
 				ring: 'rgb(var(--color-ring) / <alpha-value>)',
 				'contrast-text': 'rgb(var(--color-contrast-text) / <alpha-value>)',

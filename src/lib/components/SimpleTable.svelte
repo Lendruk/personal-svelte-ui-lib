@@ -4,15 +4,17 @@
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import Tooltip from './Tooltip.svelte';
 
+	type Align = 'left' | 'center' | 'right';
+
+	type Col = {
+		header: string;
+		align?: Align;
+	} & (SimpleCol | { customRender: ConstructorOfATypedSvelteComponent });
+
 	type SimpleCol = {
 		key: string;
 		formatter?: (val: unknown) => string;
 	};
-
-	type Col = { header: string } & (
-		| SimpleCol
-		| { customRender: ConstructorOfATypedSvelteComponent }
-	);
 
 	type Row = {
 		[index: string]: unknown;
@@ -43,11 +45,19 @@
 	let toolTipY = 0;
 	let toolTipContent = '';
 	let cssClass = '';
+	let columnAlignments: Align[] = [];
 
-	$: totalCols = cols.length + (orderable ? 1 : 0) + (actions.length > 0 ? 2 : 0);
+	const alignClassMap: Record<Align, string> = {
+		left: 'text-left',
+		center: 'text-center',
+		right: 'text-right'
+	};
+
+	$: totalCols = cols.length + (orderable ? 1 : 0) + (actions.length > 0 ? 1 : 0);
+	$: columnAlignments = cols.map((col) => getColumnAlign(col));
 
 	function onMouseEnterAction(
-		e: MouseEvent & { currentTarget: EventTarget & HTMLSpanElement },
+		e: MouseEvent & { currentTarget: EventTarget & HTMLElement },
 		actionName: string
 	) {
 		toolTipContent = actionName;
@@ -64,24 +74,42 @@
 		toolTipY = rect.top + window.scrollY + rect.height + 4;
 	}
 
-	function formatActionAvailability(row: Row, action: Action) {
-		if (action.condition) {
-			if (!action.condition(row)) {
-				return `fill-muted hover:cursor-not-allowed`;
-			}
+	function getColumnAlign(col: Col): Align {
+		if (col.align) {
+			return col.align;
 		}
-		return '';
+
+		if (!('key' in col)) {
+			return 'left';
+		}
+
+		const definedValues = rows
+			.map((row) => row[col.key])
+			.filter((value) => value !== null && value !== undefined);
+
+		if (definedValues.length > 0 && definedValues.every((value) => typeof value === 'number')) {
+			return 'right';
+		}
+
+		return 'left';
+	}
+
+	function isActionDisabled(row: Row, action: Action) {
+		return Boolean(action.condition && !action.condition(row));
 	}
 
 	function handleActionClick(row: Row, action: Action) {
-		if (action.condition && !action.condition(row)) {
+		if (isActionDisabled(row, action)) {
 			return;
 		}
 		return action.onClick(row.id);
 	}
 </script>
 
-<div class={`border-main/20 relative box-border overflow-hidden rounded-lg border ${cssClass}`}>
+<div
+	class={`simple-table-shell relative box-border overflow-hidden rounded-2xl border ${cssClass}`}
+	aria-busy={loading}
+>
 	<Tooltip
 		x={toolTipX}
 		y={toolTipY}
@@ -92,131 +120,211 @@
 	/>
 	{#if loading}
 		<div
-			class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-md"
+			class="simple-table-overlay pointer-events-none absolute inset-0 z-10 flex items-center justify-center p-4"
 		>
-			<div class="flex flex-col items-center gap-2">
+			<div
+				class="flex min-w-[10rem] flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-black/15 px-5 py-4 text-center shadow-lg shadow-black/20"
+			>
 				<LoadingSpinner />
 				{#if rows.length === 0}
-					<span class="text-xl">Loading...</span>
+					<span class="text-sm font-medium text-[rgb(var(--table-text-secondary))]">Loading...</span
+					>
 				{/if}
 			</div>
 		</div>
 	{/if}
-	<table
-		class="w-full border-collapse text-sm"
-		class:blur-sm={loading}
-		class:opacity-50={loading}
-		class:transition-all={loading}
-	>
-		<thead>
-			<tr class="border-main/20 border-b">
-				{#if orderable}
-					<th
-						class="w-12 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-						>#</th
-					>
-				{/if}
-				{#each cols as col, i}
-					<th
-						class={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground ${i !== 0 ? 'text-right' : 'text-left'}`}
-						>{col.header}</th
-					>
-				{/each}
-				{#if actions.length > 0}
-					<th class="px-4 py-3" />
-					<th
-						class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-						>Actions</th
-					>
-				{/if}
-			</tr>
-		</thead>
-		<tbody class="divide-main/10 divide-y">
-			{#if rows.length > 0}
-				{#each rows as row, i}
-					<tr class="hover:bg-surface-color/40 transition-colors duration-150">
-						{#if orderable}
-							<td class="w-12 px-4 py-3 align-middle">
-								<div class="flex flex-col items-center gap-0.5">
-									{#if i == 0}
-										<button
-											class="rounded p-0.5 transition-colors hover:bg-dark-contrast"
-											on:click={() => orderable?.onMoveDown(row.id)}
-										>
-											<ChevronDown class="h-3.5 w-3.5 fill-muted-foreground hover:fill-contrast-text" />
-										</button>
-									{:else if i == rows.length - 1}
-										<button
-											class="rounded p-0.5 transition-colors hover:bg-dark-contrast"
-											on:click={() => orderable?.onMoveUp(row.id)}
-										>
-											<ChevronUp class="h-3.5 w-3.5 fill-muted-foreground hover:fill-contrast-text" />
-										</button>
-									{:else}
-										<button
-											class="rounded p-0.5 transition-colors hover:bg-dark-contrast"
-											on:click={() => orderable?.onMoveUp(row.id)}
-										>
-											<ChevronUp class="h-3.5 w-3.5 fill-muted-foreground hover:fill-contrast-text" />
-										</button>
-										<button
-											class="rounded p-0.5 transition-colors hover:bg-dark-contrast"
-											on:click={() => orderable?.onMoveDown(row.id)}
-										>
-											<ChevronDown class="h-3.5 w-3.5 fill-muted-foreground hover:fill-contrast-text" />
-										</button>
-									{/if}
-								</div>
-							</td>
-						{/if}
-						{#each cols as col, j}
-							<td
-								class={`px-4 py-3 ${j !== 0 ? 'text-right' : 'text-left'} align-middle text-contrast-text`}
-							>
-								{#if 'key' in col}
-									{#if col.formatter}
-										{col.formatter(row[col.key])}
-									{:else}
-										{row[col.key]}
-									{/if}
-								{:else}
-									<svelte:component this={col.customRender} {row} />
-								{/if}
-							</td>
-						{/each}
-						{#if actions.length > 0}
-							<td class="px-4 py-3" />
-							<td class="px-4 py-3 text-right align-middle">
-								<div class="flex items-center justify-end gap-1">
-									{#each actions as action}
-										<button
-											on:mouseleave={() => {
-												showToolTip = false;
-											}}
-											on:mouseenter={(e) => onMouseEnterAction(e, action.name)}
-											class={`hover:bg-surface-color/60 rounded-md fill-muted-foreground p-1.5 transition-all
-												duration-150 hover:fill-contrast-text
-												${formatActionAvailability(row, action)}`}
-											on:click={() => handleActionClick(row, action)}
-											><svelte:component this={action.icon} /></button
-										>
-									{/each}
-								</div>
-							</td>
-						{/if}
-					</tr>
-				{/each}
-			{:else}
-				<tr>
-					<td colspan={totalCols} class="py-12 text-center">
-						{#if loading}
-							&nbsp;
-						{:else}
-							<span class="text-muted-foreground">No items found</span>
-						{/if}
-					</td>
+	<div class="overflow-x-auto">
+		<table
+			class="min-w-full border-collapse text-sm"
+			class:opacity-60={loading}
+			class:transition-opacity={loading}
+		>
+			<thead class="simple-table-head">
+				<tr class="border-b border-[rgb(var(--table-border)/0.12)]">
+					{#if orderable}
+						<th
+							scope="col"
+							class="w-20 whitespace-nowrap px-3 py-3.5 text-left text-[11px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--table-text-faint))] sm:px-4"
+						>
+							Move
+						</th>
+					{/if}
+					{#each cols as col, i}
+						<th
+							scope="col"
+							class={`whitespace-nowrap px-3 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--table-text-faint))] sm:px-4 ${alignClassMap[columnAlignments[i]]}`}
+						>
+							{col.header}
+						</th>
+					{/each}
+					{#if actions.length > 0}
+						<th
+							scope="col"
+							class="w-[1%] whitespace-nowrap px-3 py-3.5 text-right text-[11px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--table-text-faint))] sm:px-4"
+						>
+							Actions
+						</th>
+					{/if}
 				</tr>
-			{/if}
-		</tbody>
-	</table>
+			</thead>
+			<tbody class="divide-y divide-[rgb(var(--table-border)/0.08)]">
+				{#if rows.length > 0}
+					{#each rows as row, i (row.id ?? i)}
+						<tr class="group transition-colors duration-150 hover:bg-white/[0.04]">
+							{#if orderable}
+								<td class="px-3 py-3 align-middle sm:px-4">
+									<div class="flex items-center gap-1.5">
+										<button
+											type="button"
+											class="simple-table-icon-button h-8 w-8"
+											disabled={i === 0}
+											aria-label={`Move row ${i + 1} up`}
+											title="Move up"
+											on:click={() => orderable?.onMoveUp(row.id)}
+										>
+											<ChevronUp class="h-3.5 w-3.5 fill-current" />
+										</button>
+										<button
+											type="button"
+											class="simple-table-icon-button h-8 w-8"
+											disabled={i === rows.length - 1}
+											aria-label={`Move row ${i + 1} down`}
+											title="Move down"
+											on:click={() => orderable?.onMoveDown(row.id)}
+										>
+											<ChevronDown class="h-3.5 w-3.5 fill-current" />
+										</button>
+									</div>
+								</td>
+							{/if}
+							{#each cols as col, j}
+								<td
+									class={`px-3 py-3.5 align-middle leading-6 text-[rgb(var(--table-text-secondary))] sm:px-4 ${alignClassMap[columnAlignments[j]]}`}
+								>
+									{#if 'key' in col}
+										{#if col.formatter}
+											{col.formatter(row[col.key])}
+										{:else}
+											{row[col.key]}
+										{/if}
+									{:else}
+										<svelte:component this={col.customRender} {row} />
+									{/if}
+								</td>
+							{/each}
+							{#if actions.length > 0}
+								<td class="px-3 py-3 align-middle sm:px-4">
+									<div class="flex items-center justify-end gap-2">
+										{#each actions as action (action.name)}
+											{@const actionDisabled = isActionDisabled(row, action)}
+											<button
+												type="button"
+												class="simple-table-icon-button h-9 w-9"
+												disabled={actionDisabled}
+												aria-label={action.name}
+												title={action.name}
+												on:mouseleave={() => {
+													showToolTip = false;
+												}}
+												on:mouseenter={(e) => {
+													if (!actionDisabled) {
+														onMouseEnterAction(e, action.name);
+													}
+												}}
+												on:click={() => handleActionClick(row, action)}
+											>
+												<svelte:component this={action.icon} class="h-4 w-4 fill-current" />
+											</button>
+										{/each}
+									</div>
+								</td>
+							{/if}
+						</tr>
+					{/each}
+				{:else}
+					<tr>
+						<td colspan={totalCols} class="px-4 py-14 text-center">
+							{#if loading}
+								&nbsp;
+							{:else}
+								<div class="flex flex-col items-center gap-1.5">
+									<span class="text-sm font-medium text-[rgb(var(--table-text-secondary))]"
+										>No items found</span
+									>
+									<span class="text-xs text-[rgb(var(--table-text-faint))]"
+										>Rows will appear here when data becomes available.</span
+									>
+								</div>
+							{/if}
+						</td>
+					</tr>
+				{/if}
+			</tbody>
+		</table>
+	</div>
 </div>
+
+<style>
+	.simple-table-shell {
+		--table-surface: var(--theme-surface, var(--color-surface-color, 39 39 42));
+		--table-surface-deep: var(--theme-surface-deep, var(--color-dark-contrast, 24 24 27));
+		--table-text-primary: var(--theme-text-primary, var(--color-contrast-text, 244 244 245));
+		--table-text-secondary: var(--theme-text-secondary, var(--color-contrast-text, 228 228 231));
+		--table-text-muted: var(--theme-text-muted, var(--color-muted-foreground, 161 161 170));
+		--table-text-faint: var(--theme-text-faint, var(--color-muted-foreground, 113 113 122));
+		--table-border: var(--theme-border, var(--color-main, 239 68 68));
+		--table-border-accent: var(
+			--theme-border-accent,
+			var(--color-ring, var(--color-main, 239 68 68))
+		);
+		background: linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 42%),
+			rgb(var(--table-surface) / 0.82);
+		border-color: rgb(var(--table-border) / 0.18);
+		box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.55);
+		backdrop-filter: blur(18px);
+	}
+
+	.simple-table-head {
+		background: linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent),
+			rgb(var(--table-surface-deep) / 0.88);
+	}
+
+	.simple-table-overlay {
+		background: rgb(var(--table-surface-deep) / 0.56);
+		backdrop-filter: blur(3px);
+	}
+
+	.simple-table-icon-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0.75rem;
+		border: 1px solid rgb(255 255 255 / 0.06);
+		background: rgb(255 255 255 / 0.04);
+		color: rgb(var(--table-text-muted));
+		transition:
+			background-color 150ms ease,
+			border-color 150ms ease,
+			color 150ms ease,
+			transform 150ms ease;
+	}
+
+	.simple-table-icon-button:hover:not(:disabled) {
+		transform: translateY(-1px);
+		border-color: rgb(255 255 255 / 0.12);
+		background: rgb(255 255 255 / 0.08);
+		color: rgb(var(--table-text-primary));
+	}
+
+	.simple-table-icon-button:focus-visible {
+		outline: 2px solid rgb(var(--table-border-accent) / 0.7);
+		outline-offset: 2px;
+	}
+
+	.simple-table-icon-button:disabled {
+		cursor: not-allowed;
+		background: rgb(255 255 255 / 0.02);
+		color: rgb(var(--table-text-faint));
+		opacity: 0.42;
+	}
+</style>
