@@ -57,7 +57,7 @@
 </script>
 
 <div
-	class={`min-w-[280px] animate-toast-in overflow-hidden rounded-xl border shadow-xl shadow-black/30 ${tone.container}`}
+	class={`pointer-events-auto min-w-[280px] animate-toast-in overflow-hidden rounded-xl border shadow-xl shadow-black/30 ${tone.container}`}
 >
 	<div class="flex items-start justify-between gap-3 px-4 py-3">
 		<div class="flex min-w-0 items-start gap-3">

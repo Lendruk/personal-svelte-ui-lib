@@ -48,7 +48,11 @@
 	}
 </script>
 
-<div class="fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2">
+<div
+	class="fixed bottom-4 right-4 z-[2147483647] flex flex-col-reverse gap-2 pointer-events-none"
+	aria-live="polite"
+	aria-atomic="true"
+>
 	{#each toasts as toast, i (i)}
 		<Toast
 			onDismissClick={() => removeToast(toast)}

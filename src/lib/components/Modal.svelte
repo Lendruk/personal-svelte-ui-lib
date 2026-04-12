@@ -10,47 +10,56 @@
 
 	let { showModal = $bindable(false), class: cssClass = '', header, children }: Props = $props();
 
-	let dialog: HTMLDialogElement;
+	function closeModal(): void {
+		showModal = false;
+	}
 
-	$effect(() => {
-		if (dialog && showModal) dialog.showModal();
-		else if (dialog && !showModal) dialog.close();
-	});
+	function handleBackdropClick(event: MouseEvent): void {
+		if (event.target === event.currentTarget) {
+			closeModal();
+		}
+	}
+
+	function handleKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			event.stopPropagation();
+			closeModal();
+		}
+	}
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<dialog
-	bind:this={dialog}
-	onclose={() => (showModal = false)}
-	onclick={(e) => {
-		if (e.target === dialog) dialog.close();
-	}}
-	class={`flex min-h-[30%] flex-1 flex-col rounded-xl
-		border border-main/20
-		bg-surface-color text-contrast-text shadow-2xl shadow-black/40
-		${showModal ? '' : 'hidden'} ${cssClass}`}
->
+{#if showModal}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="flex flex-1 flex-col" onclick={(e) => e.stopPropagation()}>
-		{@render header?.()}
-		<div class="flex flex-1">
-			{@render children?.()}
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<div
+		class="modal-backdrop fixed inset-0 z-[10010] flex items-center justify-center overflow-y-auto bg-black/60 p-4"
+		role="presentation"
+		onclick={handleBackdropClick}
+		onkeydown={handleKeydown}
+	>
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div
+			role="dialog"
+			aria-modal="true"
+			tabindex="-1"
+			class={`modal-panel flex max-h-[calc(100vh-2rem)] min-h-[30%] w-fit min-w-[min(32rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-xl border border-main/20 bg-surface-color text-contrast-text shadow-2xl shadow-black/40 ${cssClass}`}
+			onclick={(event) => event.stopPropagation()}
+		>
+			{@render header?.()}
+			<div class="flex flex-1 min-h-0">
+				{@render children?.()}
+			</div>
 		</div>
 	</div>
-</dialog>
+{/if}
 
 <style>
-	dialog:not([open]) {
-		display: none !important;
+	.modal-backdrop {
+		animation: backdrop-in 0.25s ease-out;
 	}
 
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.6);
-		backdrop-filter: blur(4px);
-	}
-
-	dialog[open] {
+	.modal-panel {
 		animation: modal-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
@@ -63,10 +72,6 @@
 			opacity: 1;
 			transform: scale(1) translateY(0);
 		}
-	}
-
-	dialog[open]::backdrop {
-		animation: backdrop-in 0.25s ease-out;
 	}
 
 	@keyframes backdrop-in {
