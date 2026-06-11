@@ -1,18 +1,22 @@
 <script lang="ts">
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
-	import { createEventDispatcher } from 'svelte';
 	export { cssClass as class };
 	let cssClass = '';
 
+	type $$Props = {
+		value?: string;
+		isLoading?: boolean;
+		onchange?: (event: Event) => void;
+	};
+
 	export let value: string = '';
 	export let isLoading: boolean = false;
-
-	const dispatch = createEventDispatcher();
+	export let onchange: ((event: Event) => void) | undefined = undefined;
 </script>
 
 <div class="relative flex flex-1 items-center">
 	<select
-		on:change={(e) => dispatch('change', e)}
+		on:change={(e) => onchange?.(e)}
 		bind:value
 		class={`border-main/40 hover:border-main/70 h-10 w-full cursor-pointer
 			appearance-none rounded-lg border bg-dark-contrast px-3 pr-9
