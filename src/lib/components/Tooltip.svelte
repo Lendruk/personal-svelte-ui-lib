@@ -85,21 +85,30 @@
 	});
 </script>
 
-<div
-	bind:this={toolTipDiv}
-	style={`top:${y}px; left:${x}px`}
-	class={`border-main/30 fixed
-		z-50 rounded-lg border
-		bg-dark-contrast px-3 py-1.5
-		text-sm text-contrast-text
-		shadow-lg shadow-black/30
-		transition-[opacity,transform] duration-150
-		${size === 's' ? 'px-2 py-1 text-xs' : ''}
-		${!visible ? 'invisible scale-95 opacity-0' : 'flex scale-100 opacity-100'}
-		items-center`}
->
-	{content}
-	<slot name="toolTipContent" />
+<!--
+	The tooltip lives inside this wrapper so that the node we portal away in
+	onMount is never the first or last node of this component's fragment.
+	Svelte removes a destroyed fragment by walking from its first node to its
+	last one; if the first node has been moved to <body>, that walk ends
+	immediately and everything after it (i.e. the target) is orphaned in the DOM.
+-->
+<div style="display: contents">
+	<div
+		bind:this={toolTipDiv}
+		style={`top:${y}px; left:${x}px`}
+		class={`border-main/30 fixed
+			z-50 rounded-lg border
+			bg-dark-contrast px-3 py-1.5
+			text-sm text-contrast-text
+			shadow-lg shadow-black/30
+			transition-[opacity,transform] duration-150
+			${size === 's' ? 'px-2 py-1 text-xs' : ''}
+			${!visible ? 'invisible scale-95 opacity-0' : 'flex scale-100 opacity-100'}
+			items-center`}
+	>
+		{content}
+		<slot name="toolTipContent" />
+	</div>
 </div>
 {#if automaticMode}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
