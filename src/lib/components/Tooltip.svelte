@@ -18,7 +18,7 @@
 	} = $props();
 
 	let toolTipDiv: HTMLDivElement;
-	let targetWrapper: HTMLDivElement;
+	let targetWrapper: HTMLDivElement = $state()!;
 	let portalTarget: HTMLDivElement;
 
 	function onMouseEnter() {
@@ -38,36 +38,6 @@
 	function onMouseLeave() {
 		visible = false;
 	}
-
-	const sizeMap = {
-		xs: {
-			minW: 40,
-			minH: 20,
-			pt: 1,
-			pb: 1,
-			pl: 2,
-			pr: 2,
-			textSize: 'xs'
-		},
-		s: {
-			minW: 40,
-			minH: 20,
-			pt: 1,
-			pb: 1,
-			pl: 2,
-			pr: 2,
-			textSize: 'sm'
-		},
-		m: {
-			minW: 80,
-			minH: 30,
-			pt: 4,
-			pb: 4,
-			pl: 4,
-			pr: 4,
-			textSize: 'm'
-		}
-	};
 
 	onMount(() => {
 		// Portal the tooltip to document.body so it escapes any containing block

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import Toast from './Toast.svelte';
 	export type ToastVariant = 'default' | 'warning' | 'error';
 	export type ToastOptions = {

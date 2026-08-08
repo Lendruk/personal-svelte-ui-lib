@@ -23,6 +23,6 @@
 			class={`pointer-events-none block h-3.5 w-3.5 rounded-full bg-contrast-text shadow-sm
 			transition-transform duration-200 ease-out
 			${checked ? 'translate-x-4' : 'translate-x-0.5'}`}
-		/>
+		></span>
 	</div>
 </button>

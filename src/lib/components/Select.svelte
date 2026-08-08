@@ -3,12 +3,6 @@
 	export { cssClass as class };
 	let cssClass = '';
 
-	type $$Props = {
-		value?: string;
-		isLoading?: boolean;
-		onchange?: (event: Event) => void;
-	};
-
 	export let value: string = '';
 	export let isLoading: boolean = false;
 	export let onchange: ((event: Event) => void) | undefined = undefined;

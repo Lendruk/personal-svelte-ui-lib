@@ -1,8 +1,10 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
+
 	export type MenuEntry = {
 		id: string;
 		label: string;
-		icon?: ConstructorOfATypedSvelteComponent;
+		icon?: Component;
 	};
 
 	let {

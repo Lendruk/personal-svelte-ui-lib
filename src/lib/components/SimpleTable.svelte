@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import ChevronDown from '../icons/ChevronDown.svelte';
 	import ChevronUp from '../icons/ChevronUp.svelte';
 	import LoadingSpinner from './LoadingSpinner.svelte';
@@ -9,7 +10,7 @@
 	type Col = {
 		header: string;
 		align?: Align;
-	} & (SimpleCol | { customRender: ConstructorOfATypedSvelteComponent });
+	} & (SimpleCol | { customRender: Component });
 
 	type SimpleCol = {
 		key: string;
@@ -22,7 +23,7 @@
 	};
 
 	type Action = {
-		icon: ConstructorOfATypedSvelteComponent;
+		icon: Component;
 		onClick: (id?: string | number) => void | Promise<void>;
 		condition?: (row: Row) => boolean;
 		name: string;
