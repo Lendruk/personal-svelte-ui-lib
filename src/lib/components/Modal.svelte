@@ -29,13 +29,13 @@
 	}
 </script>
 
+<svelte:window onkeydown={(event) => showModal && handleKeydown(event)} />
 {#if showModal}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		class="modal-backdrop fixed inset-0 z-[10010] flex items-center justify-center overflow-y-auto bg-black/60 p-4"
 		role="presentation"
 		onclick={handleBackdropClick}
-		onkeydown={handleKeydown}
 	>
 		<div
 			role="dialog"
